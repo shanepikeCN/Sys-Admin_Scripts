@@ -36,14 +36,16 @@ function search_metric()
 	fi
 	echo $json_response | sed -e 's/[{}]/''/g' | awk '
 		BEGIN{ 
-			format = "%-5s            %-5s \t %-5s %-5s %-5s \n"
+			format = "%s \t %s \t %s %s %s \n"
 			printf format, "Id", "Name", "Latitude", "Longitude", "Distance"
 			RS=",\""; FS=":"; OFS="\n"; ORS="\n";
 		}	
-		# /id/{printf "%-5s \t", $2}/commonName/{printf "%-5s \t", $2}/lat/{printf "%-5s \t", $2}/lon/{printf "%-5s", $2}
-		# /distance/{printf "%-5s \n", $2}
-		/commonName/{printf "%-5s \t", $2}
-		' | sed 's/\"//g' | column -s -t
+		# /id/{printf "%-5s \t", $2}/commonName/{printf "%-5s \t", $2}
+		# 
+		/id/{printf "%s \t", $2}/commonName/{printf "%s \t", $2}/lat/{printf "%s \t", $2}
+		/lon/{printf "%s \t", $2}
+		/distance/{printf "%s \n", $2}
+		' | sed 's/\"//g' | column -ts $'\t'
 
 }
 
